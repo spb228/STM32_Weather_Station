@@ -22,11 +22,14 @@ MCU = $(CPU) -mthumb $(FPU) $(FLOAT-ABI)
 # Source Files
 C_SOURCES = \
 $(SRC_DIR)/main.c \
-$(SRC_DIR)/startup.c
+$(SRC_DIR)/startup.c \
+$(SRC_DIR)/common/led/led.c
 
 # Includes
 C_INCLUDES = \
--I$(SRC_DIR)
+-I$(SRC_DIR) \
+-I$(SRC_DIR)/common \
+-I$(SRC_DIR)/common/led
 
 # Compiler Flags
 C_DEFS = \
@@ -53,6 +56,7 @@ $(BUILD_DIR):
 	if not exist $@ mkdir $@
 
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c | $(BUILD_DIR)
+	if not exist "$(dir $@)" mkdir "$(dir $@)"
 	$(CC) -c $(CFLAGS) -o $@ $<
 
 $(BUILD_DIR)/$(TARGET).elf: $(C_SOURCES:$(SRC_DIR)/%.c=$(BUILD_DIR)/%.o)
