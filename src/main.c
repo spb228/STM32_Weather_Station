@@ -3,16 +3,24 @@
 */
 
 #include "common/led/led.h"
+#include "common/clock/system_clock.h"
+#include "common/systick/systick.h"
 
 int main(void) 
 {
     init_led(); 
-    uint32_t led_delay_val = 4000000; // 4 million cycles
+    sys_clock_config(); // configure system clock to 84MHz
+    systick_init();
+    uint32_t led_timer = get_tick(); 
+    uint32_t led_timeout = 1000; // 1000 milliseconds delay
 
     while (1)
     {
-        toggle_led();
-        led_delay(led_delay_val);
+        if (is_timeout_elapsed(led_timer, led_timeout))
+        {
+            toggle_led();
+            led_timer = get_tick();
+        }
     }
 
     return 0;

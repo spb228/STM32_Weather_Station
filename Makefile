@@ -23,13 +23,17 @@ MCU = $(CPU) -mthumb $(FPU) $(FLOAT-ABI)
 C_SOURCES = \
 $(SRC_DIR)/main.c \
 $(SRC_DIR)/startup.c \
-$(SRC_DIR)/common/led/led.c
+$(SRC_DIR)/common/led/led.c \
+$(SRC_DIR)/common/clock/system_clock.c \
+$(SRC_DIR)/common/systick/systick.c
 
 # Includes
 C_INCLUDES = \
 -I$(SRC_DIR) \
 -I$(SRC_DIR)/common \
--I$(SRC_DIR)/common/led
+-I$(SRC_DIR)/common/led \
+-I$(SRC_DIR)/common/clock \
+-I$(SRC_DIR)/common/systick
 
 # Compiler Flags
 C_DEFS = \

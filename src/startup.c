@@ -3,6 +3,7 @@
 // Forward declarations
 void Reset_Handler(void);
 void Default_Handler(void);
+void SysTick_Handler(void) __attribute__((weak, alias("Default_Handler")));
 extern int main(void);
 
 // Linker script symbols
@@ -31,7 +32,7 @@ uint32_t vectors[] __attribute__((section(".isr_vector"))) = {
     (uint32_t)Default_Handler,      // Debug Monitor
     0,                              // Reserved
     (uint32_t)Default_Handler,      // PendSV
-    (uint32_t)Default_Handler       // SysTick
+    (uint32_t)SysTick_Handler       // SysTick
 };
 
 // Default handler for interrupts
