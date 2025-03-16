@@ -1,9 +1,11 @@
 #include "systick.h"
+#include "common/uart/uart.h"
 
 volatile uint32_t g_tick_count = 0; // global tick variable for systick
 
 void systick_init(void)
 {
+    usart2_send_str("[systick.c] [DBG] Initializing systick configs\n");
     SYSTICK_CTRL = 0; // disable systick timer
     SYSTICK_LOAD = (SYSTEM_CLOCK / 1000) - 1; // for 84MHz this would be 83999
     SYSTICK_VAL = 0; // clear current value

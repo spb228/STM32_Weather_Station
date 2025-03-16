@@ -9,6 +9,9 @@ USART2 is on APB1
 
 void usart2_gpio_init(void)
 {
+    RCC_AHB1ENR |= (1 << 0);    // enable GPIOA clock
+    RCC_APB1ENR |= (1 << 17);   // Enable RCC for USART2
+
     GPIOA_MODER |= (2 << (USART2_CTS_PIN * 2)) |    //  Alt Func Mode PA0 -> USART2 CTS
                    (2 << (USART2_RTS_PIN * 2)) |    //  Alt Func Mode PA1 -> USART2 RTS
                    (2 << (USART2_TX_PIN * 2))  |    //  Alt Func Mode PA2 -> USART2 TX
@@ -29,9 +32,6 @@ void usart2_gpio_init(void)
                   (7 << (USART2_TX_PIN * 4))  |    //  Alt Func 7
                   (7 << (USART2_RX_PIN * 4))  |    //  Alt Func 7
                   (7 << (USART2_CK_PIN * 4));      //  Alt Func 7
-
-    RCC_AHB1ENR |= (1 << 0);    // enable GPIOA clock
-    RCC_APB1ENR |= (1 << 17);   // Enable RCC for USART2
 }
 
 void usart2_config()

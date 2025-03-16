@@ -9,22 +9,18 @@
 
 int main(void) 
 {
-    init_led();         // initialize LED pins and configs
     sys_clock_config(); // configure system clock to 84MHz
+    usart2_config();    // initialize UART pins and configs
+    init_led();         // initialize LED pins and configs
     systick_init();     // initialize systick to count 83999 (1ms for 84MHz clock)
 
     volatile uint32_t led_timer = get_tick();   // get current tick_time for led toggle. Will be 0 initially.
-    volatile uint32_t led_timeout = 1000;       // 1000 milliseconds delay
+    volatile uint32_t led_timeout = 1000;       // blink LED every 1000 seconds
 
-    usart2_config();    // initialize UART pins and configs
-    
     while (1)
     {
         if (is_timeout_elapsed(led_timer, led_timeout))
         {
-            //usart2_send_char(c);
-            //char str[] = "Hello\nWorld\n";
-            usart2_send_str("Hello World\n");
             toggle_led();
             led_timer = get_tick();
         }
