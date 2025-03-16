@@ -25,7 +25,8 @@ $(SRC_DIR)/main.c \
 $(SRC_DIR)/startup.c \
 $(SRC_DIR)/common/led/led.c \
 $(SRC_DIR)/common/clock/system_clock.c \
-$(SRC_DIR)/common/systick/systick.c
+$(SRC_DIR)/common/systick/systick.c \
+$(SRC_DIR)/common/uart/uart.c
 
 # Includes
 C_INCLUDES = \
@@ -33,7 +34,8 @@ C_INCLUDES = \
 -I$(SRC_DIR)/common \
 -I$(SRC_DIR)/common/led \
 -I$(SRC_DIR)/common/clock \
--I$(SRC_DIR)/common/systick
+-I$(SRC_DIR)/common/systick \
+-I$(SRC_DIR)/common/uart
 
 # Compiler Flags
 C_DEFS = \

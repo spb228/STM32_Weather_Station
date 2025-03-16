@@ -3,6 +3,7 @@
         "stdint.h": "c",
         "led.h": "c",
         "common_def.h": "c",
-        "system_clock.h": "c"
+        "system_clock.h": "c",
+        "uart.h": "c"
     }
 }

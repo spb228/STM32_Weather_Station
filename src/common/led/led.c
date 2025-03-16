@@ -1,6 +1,6 @@
 #include "led.h"
 
-void init_led()
+void init_led(void)
 {
     RCC_AHB1ENR |= (1 << 0); // enable GPIOA
     GPIOA_MODER &= ~(3 << (LED_PIN * 2)); // clear bit 10 and 11
@@ -15,7 +15,7 @@ void led_delay(uint32_t delay)
     }
 }
 
-void toggle_led()
+void toggle_led(void)
 {
     GPIOA_ODR ^= (1 << LED_PIN);
 }
