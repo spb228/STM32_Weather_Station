@@ -22,8 +22,10 @@ void init_sys_clock(void)
 
     RCC_CFGR = 0;
     RCC_CFGR |= (0 << 4)  |          // AHB prescaler = 1 (SYSCLK not divided)
-                (5 << 10) |          // APB1 prescaler = 4 (HCLK divided by 4 -> 21MHz)
-                (4 << 13);           // APB2 prescaler = 2 (HCLK divided by 2 -> 42MHz)
+                //(5 << 10) |        // APB1 prescaler = 4 (HCLK divided by 4 -> 21MHz)
+                (4 << 10);           // APB1 prescaler = 2 (HCLK divided by 4 -> 42MHz)
+                //(4 << 13);         // APB2 prescaler = 2 (HCLK divided by 2 -> 42MHz)
+    RCC_CFGR &= ~(7 << 13);          // APB2 prescaler = 0 (HCLK not divided  -> 84MHz)   
 
     RCC_CFGR |= (2 << 0);            // PLL used as sys clock
     while ((RCC_CFGR & (3 << 2)) != (2 << 2)); // wait until PLL is being used
