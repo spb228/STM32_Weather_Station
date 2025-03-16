@@ -60,7 +60,7 @@ void usart2_config()
     */
     USART2_BRR = 0;
     USART2_BRR = (13 << 0) |     // fraction for 115200 baud rate
-                (22 << 4);       // mantissa for 115200 baud rate
+                 (22 << 4);      // mantissa for 115200 baud rate
 
     USART2_CR1 |= (1 << 2) |     // receiver enabled
                   (1 << 3);      // transmitter enabled
@@ -68,17 +68,48 @@ void usart2_config()
     USART2_CR1 |= (1 << 13);     // enable USART2
 }
 
-void usart2_send_char(const char c)
+uint8_t usart2_send_char(const char c)
 {
+    // if usart2 is disabled, return error
+    if (!(USART2_CR1 & (1 << 13)))
+    {
+        return USART2_TX_DISABLED;
+    }
+
     // wait until transmit data reg is empty
-    while (!(USART2_SR & (1 << 7))); // polling TXE instead of interrupt
+    volatile uint32_t start_tick_usart2_sr = get_tick(); 
+    while (!(USART2_SR & (1 << 7)))
+    {
+        if (is_timeout_elapsed(start_tick_usart2_sr, USART2_CHAR_TIMEOUT))
+        {
+            return USART2_TX_TIMEOUT;
+        }
+    }
 
     if (c == '\n')
     {
         USART2_DR = '\r'; // send carriage return
-        while (!(USART2_SR & (1 << 6))); // wait until transmission complete
 
-        while (!(USART2_SR & (1 << 7))); // wait until transmission data is empty
+        // wait until transmission complete
+        start_tick_usart2_sr = get_tick();
+        while (!(USART2_SR & (1 << 6))) 
+        {
+            if (is_timeout_elapsed(start_tick_usart2_sr, USART2_CHAR_TIMEOUT))
+            {
+                return USART2_TX_TIMEOUT;
+            }
+        } 
+
+        // wait until transmission data is empty
+        start_tick_usart2_sr = get_tick();
+        while (!(USART2_SR & (1 << 7))) 
+        {
+            if (is_timeout_elapsed(start_tick_usart2_sr, USART2_CHAR_TIMEOUT))
+            {
+                return USART2_TX_TIMEOUT;
+            }
+        }
+
         USART2_DR = '\n'; // send next line
     }
     else 
@@ -86,7 +117,17 @@ void usart2_send_char(const char c)
         USART2_DR = c; 
     }
     
-    while (!(USART2_SR & (1 << 6))); // wait until transmit is complete
+    // wait until transmit is complete
+    start_tick_usart2_sr = get_tick();
+    while (!(USART2_SR & (1 << 6)))
+    {
+        if (is_timeout_elapsed(start_tick_usart2_sr, USART2_CHAR_TIMEOUT))
+        {
+            return USART2_TX_TIMEOUT;
+        }
+    }
+
+    return USART2_SUCCESS;
 }
 
 uint8_t usart2_send_str(char *c)
@@ -94,18 +135,22 @@ uint8_t usart2_send_str(char *c)
     // check if pointer is null or string is empty
     if (c == NULL)
     {
-        return UART_NULL_PTR;  
+        return USART2_NULL_PTR;  
     }
     else if (*c == '\0')
     {
-        return UART_EMPTY_STR;
+        return USART2_EMPTY_STR;
     }
 
     while (*c != '\0')
     {
-        usart2_send_char(*c); 
+        uint8_t status = usart2_send_char(*c);
+        if (status != USART2_SUCCESS)
+        {
+            return status;
+        } 
         c++; 
     }
 
-    return UART_SUCCESS;
+    return USART2_SUCCESS;
 }
