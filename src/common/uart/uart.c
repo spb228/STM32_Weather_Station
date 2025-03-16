@@ -72,13 +72,21 @@ void usart2_send_char(const char c)
 {
     // wait until transmit data reg is empty
     while (!(USART2_SR & (1 << 7))); // polling TXE instead of interrupt
+
+    if (c == '\n')
+    {
+        USART2_DR = '\r'; // send carriage return
+        while (!(USART2_SR & (1 << 6))); // wait until transmission complete
+
+        while (!(USART2_SR & (1 << 7))); // wait until transmission data is empty
+        USART2_DR = '\n'; // send next line
+    }
+    else 
+    {
+        USART2_DR = c; 
+    }
     
-    USART2_DR = c; 
-
-    // wait until transmit is complete
-    while (!(USART2_SR & (1 << 6)));
-
-    // TODO: handle newline conversion (sending CR+LF when \n is requested)
+    while (!(USART2_SR & (1 << 6))); // wait until transmit is complete
 }
 
 uint8_t usart2_send_str(char *c)
