@@ -41,8 +41,8 @@ void usart2_config()
     USART2_CR1 = 0;
     USART2_CR1 &= ~(1 << 13);   // disable USART2
     USART2_CR1 &= ~(1 << 12);   // 8 data bits for stlink debugger. 0 by default. 
-    USART2_CR1 |= (1 << 10) |   // Parity control enabled
-                  (1 << 9);     // even parity
+    //USART2_CR1 |= (1 << 10) |   // Parity control enabled
+    //              (1 << 9);     // even parity
 
     USART2_CR2 = 0; 
     USART2_CR2 &= ~(1 << 12);   // 1 stop bit is typical for uart. 0 by default. 
@@ -79,4 +79,25 @@ void usart2_send_char(const char c)
     while (!(USART2_SR & (1 << 6)));
 
     // TODO: handle newline conversion (sending CR+LF when \n is requested)
+}
+
+uint8_t usart2_send_str(char *c)
+{
+    // check if pointer is null or string is empty
+    if (c == NULL)
+    {
+        return UART_NULL_PTR;  
+    }
+    else if (*c == '\0')
+    {
+        return UART_EMPTY_STR;
+    }
+
+    while (*c != '\0')
+    {
+        usart2_send_char(*c); 
+        c++; 
+    }
+
+    return UART_SUCCESS;
 }

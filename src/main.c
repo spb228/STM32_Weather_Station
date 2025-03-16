@@ -1,7 +1,7 @@
 /*
     Main file for the weather station.
 */
-
+#include <string.h>
 #include "common/led/led.h"
 #include "common/clock/system_clock.h"
 #include "common/systick/systick.h"
@@ -22,7 +22,9 @@ int main(void)
     {
         if (is_timeout_elapsed(led_timer, led_timeout))
         {
-            usart2_send_char(c);
+            //usart2_send_char(c);
+            char str[] = "hello";
+            usart2_send_str(str);
             toggle_led();
             led_timer = get_tick();
         }
