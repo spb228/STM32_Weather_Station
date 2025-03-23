@@ -40,11 +40,11 @@ void usart2_config()
     USART2_BRR = 0;
 
     /*
-    baud rate calc (115200):
-        fclk = 42 Mhz (APB1 clock speed)
-        usartdiv = fclk / (16 * baud) = 22.79
-        usart_div_mantissa = 22
-        usart_div_fraction = 0.79 * 16 = 12.64 = 13
+     * baud rate calc (115200):
+     * fclk = 42 Mhz (APB1 clock speed)
+     * usartdiv = fclk / (16 * baud) = 22.79
+     * usart_div_mantissa = 22
+     * usart_div_fraction = 0.79 * 16 = 12.64 = 13
     */
     USART2_BRR = (13 << 0) | // fraction for 115200 baud rate
                  (22 << 4);  // mantissa for 115200 baud rate

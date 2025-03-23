@@ -1,3 +1,6 @@
+#ifndef UART_H
+#define UART_H
+
 #include <string.h>
 #include "common/common_def.h"
 #include "common/systick/systick.h"
@@ -29,3 +32,5 @@ void usart2_gpio_init(void);
 void usart2_config(void);
 
 uint8_t print(char *);
+
+#endif // UART_H
