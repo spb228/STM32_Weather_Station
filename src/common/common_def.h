@@ -1,3 +1,6 @@
+#ifndef COMMON_DEF_H
+#define COMMON_DEF_H
+
 #include <stdint.h>
 
 // System Clock
@@ -52,3 +55,9 @@
 #define USART2_CR2      (* (volatile uint32_t *)(USART2_BASE + 0x10))
 #define USART2_CR3      (* (volatile uint32_t *)(USART2_BASE + 0x14))
 #define USART2_GTPR     (* (volatile uint32_t *)(USART2_BASE + 0x18))
+
+// NVIC Addresses
+#define NVIC_BASE       (0xE000E000U)
+#define NVIC_ISER1      (* (volatile uint32_t *)(NVIC_BASE + 0x104))
+
+#endif // COMMON_DEF_H
