@@ -5,6 +5,7 @@ volatile uint32_t g_tick_count = 0; // global tick variable for systick
 
 void systick_init(void)
 {
+    print("\r\ninitializing SysTick configs\r\n");
     SYSTICK_CTRL = 0; // disable systick timer
     SYSTICK_LOAD = (SYSTEM_CLOCK / 1000) - 1; // for 84MHz this would be 83999
     SYSTICK_VAL = 0; // clear current value

@@ -28,4 +28,4 @@ void usart2_gpio_init(void);
 
 void usart2_config(void);
 
-void usart2_send_str(char *);
+uint8_t print(char *);

@@ -7,6 +7,9 @@
 #include "common/systick/systick.h"
 #include "common/uart/uart.h"
 
+#define LED_TIMEOUT     1000 // blink LED every 1000 seconds
+
+
 int main(void)
 {
     sys_clock_config(); // configure system clock to 84MHz
@@ -17,13 +20,12 @@ int main(void)
     __asm volatile ("cpsie i"); // enable ext interrupts
 
     volatile uint32_t led_timer = get_tick(); // get current tick_time for led toggle. Will be 0 initially.
-    volatile uint32_t led_timeout = 1000;     // blink LED every 1000 seconds
-
+ 
     while (1)
     {
-        if (is_timeout_elapsed(led_timer, led_timeout))
+        if (is_timeout_elapsed(led_timer, LED_TIMEOUT))
         {
-            usart2_send_str("Test"); 
+            print("blinking LED...\r\n"); 
             toggle_led();
             led_timer = get_tick();
         }

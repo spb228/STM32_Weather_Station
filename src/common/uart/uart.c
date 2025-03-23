@@ -7,36 +7,27 @@ USART2 is on APB1
 
 */
 
-//static uint8_t usart2_tx_buffer[UART_TX_BUFFER_SIZE]; 
-volatile char *tx_buffer; 
-volatile uint32_t tx_index; 
-volatile uint32_t tx_data_len; 
+// static uint8_t usart2_tx_buffer[UART_TX_BUFFER_SIZE];
+volatile char *tx_buffer;
+volatile uint32_t tx_index;
+volatile uint32_t tx_data_len;
 
 void usart2_gpio_init(void)
 {
     RCC_AHB1ENR |= (1 << 0);  // enable GPIOA clock
     RCC_APB1ENR |= (1 << 17); // Enable RCC for USART2
 
-    GPIOA_MODER |= (2 << (USART2_CTS_PIN * 2)) | //  Alt Func Mode PA0 -> USART2 CTS
-                   (2 << (USART2_RTS_PIN * 2)) | //  Alt Func Mode PA1 -> USART2 RTS
-                   (2 << (USART2_TX_PIN * 2)) |  //  Alt Func Mode PA2 -> USART2 TX
-                   (2 << (USART2_RX_PIN * 2)) |  //  Alt Func Mode PA3 -> USART2 RX
-                   (2 << (USART2_CK_PIN * 2));   //  Alt Func Mode PA4 -> USART2 CK
+    GPIOA_MODER |= (2 << (USART2_TX_PIN * 2)) | //  Alt Func Mode PA2 -> USART2 TX
+                   (2 << (USART2_RX_PIN * 2));  //  Alt Func Mode PA3 -> USART2 RX
 
-    GPIOA_OSPEEDR |= (2 << (USART2_CTS_PIN * 2)) | //  High Speed Mode for all UART pins
-                     (2 << (USART2_RTS_PIN * 2)) |
-                     (2 << (USART2_TX_PIN * 2)) |
-                     (2 << (USART2_RX_PIN * 2)) |
-                     (2 << (USART2_CK_PIN * 2));
+    GPIOA_OSPEEDR |= (2 << (USART2_TX_PIN * 2)) | // high speed GPIO
+                     (2 << (USART2_RX_PIN * 2));  // high speed GPIO
 
     GPIOA_PUPDR |= (1 << (USART2_TX_PIN * 2)) | // pull up resistor
                    (1 << (USART2_RX_PIN * 2));  // pull up resistor
 
-    GPIOA_AFRL |= (7 << (USART2_CTS_PIN * 4)) | //  Alt Func 7
-                  (7 << (USART2_RTS_PIN * 4)) | //  Alt Func 7
-                  (7 << (USART2_TX_PIN * 4)) |  //  Alt Func 7
-                  (7 << (USART2_RX_PIN * 4)) |  //  Alt Func 7
-                  (7 << (USART2_CK_PIN * 4));   //  Alt Func 7
+    GPIOA_AFRL |= (7 << (USART2_TX_PIN * 4)) | //  Alt Func 7
+                  (7 << (USART2_RX_PIN * 4));  //  Alt Func 7
 }
 
 void usart2_config()
@@ -47,14 +38,6 @@ void usart2_config()
     USART2_CR2 = 0;
     USART2_CR3 = 0;
     USART2_BRR = 0;
-
-    //USART2_CR1 &= ~(1 << 13); // disable USART2
-    //USART2_CR1 &= ~(1 << 12); // 8 data bits for stlink debugger. 0 by default.
-
-    //USART2_CR2 &= ~(1 << 12); // 1 stop bit is typical for uart. 0 by default.
-
-    //USART2_CR3 &= ~(1 << 8); // RTS disabled - not supported by stlink. 0 by default.
-    //USART2_CR3 &= ~(1 << 9); // CTS disabled - not supported by stlink. 0 by default.
 
     /*
     baud rate calc (115200):
@@ -69,39 +52,48 @@ void usart2_config()
     USART2_CR1 |= (1 << 2) | // receiver enabled
                   (1 << 3);  // transmitter enabled
 
-    // USART2_CR1 |= USART2_CR1_TCIE | // enable trans. complete interrupt
-    //               USART2_CR1_TXEIE; // enable trans. interrupt
-    
-    USART2_CR1 |= (1 << 13); // enable USART2  
+    USART2_CR1 |= (1 << 13); // enable USART2
 
     NVIC_ISER1 |= (1 << (USART2_INTERRUPT_NUM - 32)); // enable USART2 interrupt in NVIC reg
 
-    //USART2_CR1 |= (1 << 7);  // TXEIE bit 
+    USART2_CR1 |= USART2_CR1_TXEIE; // enable trans. interrupt
 }
 
-void usart2_send_str(char *str)
+uint8_t print(char *str)
 {
-    tx_buffer = str; 
-    tx_index = 0; 
-    tx_data_len = 0; 
-    while (str[tx_data_len] != '\0')
+    if (str == NULL)
     {
-        tx_data_len++; 
+        return USART2_NULL_PTR; 
     }
-    
-    USART2_CR1 |= USART2_CR1_TXEIE; 
+
+    if (str[0] == '\0')
+    {
+        return USART2_EMPTY_STR; 
+    }
+
+    tx_buffer = str;
+    tx_index = 0;
+    tx_data_len = 0;
+    while (tx_buffer[tx_data_len] != '\0')
+    {
+        tx_data_len++;
+    }
+
+    USART2_CR1 |= USART2_CR1_TXEIE;
+
+    return USART2_SUCCESS; 
 }
 
 void USART2_IRQHandler(void)
 {
     // if tx data reg empty
-    if (USART2_SR & (1 << 7))
+    if ((USART2_SR & USART2_SR_TXE) && (USART2_CR1 & USART2_CR1_TXEIE))
     {
         if (tx_index < tx_data_len)
         {
-            USART2_DR = tx_buffer[tx_index++]; 
+            USART2_DR = tx_buffer[tx_index++];
         }
-        else 
+        else
         {
             USART2_CR1 &= ~(1 << 7); // disable TXE interrupt when done
         }
