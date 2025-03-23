@@ -7,10 +7,14 @@ USART2 is on APB1
 
 */
 
-// static uint8_t usart2_tx_buffer[UART_TX_BUFFER_SIZE];
-volatile char *tx_buffer;
-volatile uint32_t tx_index;
-volatile uint32_t tx_data_len;
+static volatile uint8_t usart2_tx_rb[USART2_TX_BUFFER_SIZE]; // ring buffer definition
+static volatile uint32_t usart2_tx_head = 0; 
+static volatile uint32_t usart2_tx_tail = 0; 
+static volatile uint8_t tx_busy = 0; // 0 denotes free, 1 denotes busy
+
+// volatile char *tx_buffer;
+// volatile uint32_t tx_index;
+// volatile uint32_t tx_data_len;
 
 void usart2_gpio_init(void)
 {
@@ -59,6 +63,54 @@ void usart2_config()
     USART2_CR1 |= USART2_CR1_TXEIE; // enable trans. interrupt
 }
 
+uint8_t usart2_begin_transmission(void)
+{
+    if (tx_busy)
+    {
+        return USART2_TX_BUSY;
+    }
+
+    if (usart2_tx_head != usart2_tx_tail)
+    {
+        tx_busy = 1; // enable tx_busy
+        USART2_CR1 |= USART2_CR1_TXEIE; // enable txe interrupt
+    }
+
+    return USART2_SUCCESS; 
+}
+
+uint8_t usart2_send_char(char c)
+{
+    uint32_t next_head = ((usart2_tx_head + 1) % USART2_TX_BUFFER_SIZE);
+
+    /* TODO: possibly add a delay here to wait till buffer empty */
+    /* if buffer full return error */
+    if (next_head == usart2_tx_tail)
+    {
+        return USART2_BUFFER_FULL; 
+    }
+
+    usart2_tx_rb[usart2_tx_head] = c; 
+
+    usart2_tx_head = next_head; 
+
+    usart2_begin_transmission(); 
+
+    return USART2_SUCCESS;
+}
+
+uint8_t usart2_send_str(char *str)
+{
+    /* while input string is not empty*/
+    while (*str)
+    {
+        usart2_send_char(*str++); 
+    }
+
+    return USART2_SUCCESS;
+}
+
+
 uint8_t print(char *str)
 {
     if (str == NULL)
@@ -71,31 +123,27 @@ uint8_t print(char *str)
         return USART2_EMPTY_STR; 
     }
 
-    tx_buffer = str;
-    tx_index = 0;
-    tx_data_len = 0;
-    while (tx_buffer[tx_data_len] != '\0')
-    {
-        tx_data_len++;
-    }
-
-    USART2_CR1 |= USART2_CR1_TXEIE;
+    usart2_send_str(str); 
 
     return USART2_SUCCESS; 
 }
 
 void USART2_IRQHandler(void)
 {
-    // if tx data reg empty
+    /* if tx data reg is empty */
     if ((USART2_SR & USART2_SR_TXE) && (USART2_CR1 & USART2_CR1_TXEIE))
     {
-        if (tx_index < tx_data_len)
+        if (usart2_tx_tail != usart2_tx_head)
         {
-            USART2_DR = tx_buffer[tx_index++];
+            USART2_DR = usart2_tx_rb[usart2_tx_tail];
+            usart2_tx_tail = ((usart2_tx_tail + 1) % USART2_TX_BUFFER_SIZE);
         }
         else
         {
-            USART2_CR1 &= ~(1 << 7); // disable TXE interrupt when done
+            USART2_CR1 &= ~USART2_CR1_TXEIE;
+            tx_busy = 0;
         }
     }
+
+    // TODO: add TCIE functionality to check if tranmission is complete
 }
