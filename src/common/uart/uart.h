@@ -16,6 +16,8 @@
 #define USART2_EMPTY_STR        2
 #define USART2_TX_DISABLED      3
 #define USART2_TX_TIMEOUT       4
+#define USART2_BUFFER_FULL      5
+#define USART2_TX_BUSY          6
 
 #define USART2_CHAR_TIMEOUT     20
 
@@ -23,9 +25,10 @@
 
 #define USART2_CR1_TCIE         (1 << 6)
 #define USART2_CR1_TXEIE        (1 << 7)
+#define USART2_SR_TC            (1 << 6)
 #define USART2_SR_TXE           (1 << 7)
 
-#define UART_TX_BUFFER_SIZE     128
+#define USART2_TX_BUFFER_SIZE     128
 
 void usart2_gpio_init(void);
 
