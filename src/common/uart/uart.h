@@ -36,4 +36,12 @@ void usart2_config(void);
 
 uint8_t print(char *);
 
+uint8_t usart2_begin_transmission(void);
+
+uint8_t usart2_send_char(char c);
+
+uint8_t usart2_send_str(char *str);
+
+void USART2_IRQHandler(void);
+
 #endif // UART_H

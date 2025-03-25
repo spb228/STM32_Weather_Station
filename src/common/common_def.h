@@ -60,4 +60,8 @@
 #define NVIC_BASE       (0xE000E000U)
 #define NVIC_ISER1      (* (volatile uint32_t *)(NVIC_BASE + 0x104))
 
+// I2C Addresses
+#define I2C1_BASE      (APB1_BASE + 0x5400)
+
+
 #endif // COMMON_DEF_H
