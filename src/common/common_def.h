@@ -37,6 +37,13 @@
 #define GPIOA_ODR       (* (volatile uint32_t *)(GPIOA_BASE + 0x14))
 #define GPIOA_AFRL      (* (volatile uint32_t *)(GPIOA_BASE + 0x20))
 
+#define GPIOB_BASE      (AHB1_BASE + 0x400)
+#define GPIOB_MODER     (* (volatile uint32_t *)(GPIOB_BASE + 0x00))
+#define GPIOB_OTYPER    (* (volatile uint32_t *)(GPIOB_BASE + 0x04))
+#define GPIOB_OSPEEDR   (* (volatile uint32_t *)(GPIOB_BASE + 0x08))
+#define GPIOB_PUPDR     (* (volatile uint32_t *)(GPIOB_BASE + 0x0C))   
+#define GPIOB_AFRH      (* (volatile uint32_t *)(GPIOB_BASE + 0x24))
+
 // Power Control Addresses
 #define PWR_BASE        0x40007000U
 #define PWR_CR          (* (volatile uint32_t *)(PWR_BASE + 0x00))
@@ -58,10 +65,18 @@
 
 // NVIC Addresses
 #define NVIC_BASE       (0xE000E000U)
+#define NVIC_ISER0      (* (volatile uint32_t *)(NVIC_BASE + 0x100))
 #define NVIC_ISER1      (* (volatile uint32_t *)(NVIC_BASE + 0x104))
 
 // I2C Addresses
-#define I2C1_BASE      (APB1_BASE + 0x5400)
-
+#define I2C1_BASE       (APB1_BASE + 0x5400)
+#define I2C1_CR1        (* (volatile uint32_t *)(I2C1_BASE + 0x00))
+#define I2C1_CR2        (* (volatile uint32_t *)(I2C1_BASE + 0x04))
+#define I2C1_OAR1       (* (volatile uint32_t *)(I2C1_BASE + 0x08))
+#define I2C1_DR         (* (volatile uint32_t *)(I2C1_BASE + 0x10))
+#define I2C1_SR1        (* (volatile uint32_t *)(I2C1_BASE + 0x14))
+#define I2C1_SR2        (* (volatile uint32_t *)(I2C1_BASE + 0x18))
+#define I2C1_CCR        (* (volatile uint32_t *)(I2C1_BASE + 0x1C))
+#define I2C1_TRISE      (* (volatile uint32_t *)(I2C1_BASE + 0x20))
 
 #endif // COMMON_DEF_H
