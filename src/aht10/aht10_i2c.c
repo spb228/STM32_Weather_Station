@@ -10,6 +10,8 @@
 
 void i2c1_gpio_init(void)
 {
+    print("I2C1 gpio init...\r\n");
+
     /* enable clock for GPIOB */
     RCC_AHB1ENR |= (1 << 1);
 
@@ -60,8 +62,8 @@ void i2c1_config(void)
     I2C1_TRISE = 43;  // 42MHz + 1
 
     /* enable i2c interrupts */
-    // I2C1_CR2 |= (1 << 9); // ITEVTEN 
-    // I2C1_CR2 |= (1 << 8); // ITERREN
+    I2C1_CR2 |= (1 << 9); // ITEVTEN 
+    I2C1_CR2 |= (1 << 8); // ITERREN
 
     /* enable i2c1 */
     I2C1_CR1 |= (1 << 0);
@@ -105,7 +107,7 @@ void I2C1_StartTransaction(
     uint8_t *rx_data,
     uint16_t rx_len)
 {
-    print("I2C1 starting transaction");
+    print("I2C1 starting transaction\r\n");
 
     //__asm volatile ("cpsid i"); // Disable all interrupts
     
@@ -125,11 +127,14 @@ void I2C1_StartTransaction(
     I2C1_CR2 |= (1 << 8); // ITERREN
 
     //__asm volatile ("cpsid i"); // enable all interrupts
+
+    /* start i2c1 */
+    I2C1_CR1 |= I2C1_CR1_START;
 }
 
 void I2C1_EV_IRQHandler(void)
 {
-    print("I2C1 event interrupt triggered..."); 
+    //print("I2C1 event interrupt triggered...\r\n"); 
 
     /* read SR1 to clear flags */
     volatile uint32_t sr1 = I2C1_SR1;
@@ -199,11 +204,7 @@ void I2C1_EV_IRQHandler(void)
                 }
 
                 /* read received byte */
-                i2c1_transaction.rx_buffer[i2c1_transaction.rx_index] = I2C1_DR;
-
-                print((char *)i2c1_transaction.rx_buffer[i2c1_transaction.rx_index]);
-
-                i2c1_transaction.rx_index++;
+                i2c1_transaction.rx_buffer[i2c1_transaction.rx_index++] = I2C1_DR;
 
                 /* check if reception complete */
                 if (i2c1_transaction.rx_index >= i2c1_transaction.rx_length)
@@ -221,6 +222,6 @@ void I2C1_EV_IRQHandler(void)
 
 void I2C1_ER_IRQHandler(void)
 {
-    print("I2C1 error interrupt triggered..."); 
+    print("I2C1 error interrupt triggered...\r\n"); 
 }
 

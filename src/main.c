@@ -1,6 +1,8 @@
 /*
     Main file for the weather station.
 */
+#include <stdlib.h>
+
 #include <string.h>
 #include "common/led/led.h"
 #include "common/clock/system_clock.h"

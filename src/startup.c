@@ -76,7 +76,7 @@ uint32_t vectors[] __attribute__((section(".isr_vector"), aligned(0x80))) = {
     (uint32_t)Default_Handler,  // 35: SPI1
     (uint32_t)Default_Handler,  // 36: SPI2
     (uint32_t)Default_Handler,  // 37: USART1
-    (uint32_t)USART2_IRQHandler // 38: USART2 - Our interrupt handler
+    (uint32_t)USART2_IRQHandler // 38: USART2
 };
 
 // Default handler for interrupts
