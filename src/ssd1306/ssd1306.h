@@ -59,13 +59,7 @@
 #define SSD1306_COMMAND       0x00
 #define SSD1306_DATA          0x40
 
-// Function prototypes
-void SSD1306_Init(void);
-void SSD1306_Clear(void);
-void SSD1306_Display(void);
-void SSD1306_DrawPixel(uint8_t x, uint8_t y);
-void SSD1306_WriteCommand(uint8_t command);
-void SSD1306_WriteData(uint8_t* data, uint16_t size);
+void delay_ms(uint32_t ms);
 
 // I2C interface functions
 void I2C1_Init(void);
@@ -74,6 +68,14 @@ void I2C1_Stop(void);
 void I2C1_SendAddr(uint8_t addr);
 void I2C1_SendByte(uint8_t data);
 
-void delay_ms(uint32_t ms);
+// Function prototypes
+void SSD1306_Init(void);
+void SSD1306_Clear(void);
+void SSD1306_Display(void);
+void SSD1306_DrawPixel(uint8_t x, uint8_t y);
+void SSD1306_WriteCommand(uint8_t command);
+void SSD1306_WriteData(uint8_t* data, uint16_t size);
+void draw_test_pattern(void);
+void SSD1306_Wrapper(void);
 
 #endif /* SSD1306 */
