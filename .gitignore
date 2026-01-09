@@ -1,1 +1,5 @@
+# Ignore everything from build
 build/*
+
+# Allow the final binary from build only
+!build/stm32_weather_station.bin
