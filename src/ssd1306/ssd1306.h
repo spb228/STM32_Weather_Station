@@ -8,13 +8,6 @@
 #define RCC_APB1ENR_I2C1EN    (1U << 21)
 #define RCC_APB1RSTR_I2C1RST  (1U << 21)
 
-// GPIO register bit definitions
-#define GPIO_MODER_AF         (2U)
-#define GPIO_OTYPER_OD        (1U)
-#define GPIO_OSPEEDR_HIGH     (3U)
-#define GPIO_PUPDR_PU         (1U)
-#define GPIO_AF4              (4U)
-
 // I2C register bit definitions
 #define I2C_CR1_PE            (1U << 0)
 #define I2C_CR1_START         (1U << 8)

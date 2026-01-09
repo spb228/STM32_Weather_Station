@@ -44,6 +44,9 @@ int main(void)
             toggle_led();
             led_timer = get_tick();
         }
+
+        //TODO :  add aht10, ssd1306, and SD card code here after testing...
+
     }
 
     return 0;
