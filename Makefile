@@ -26,7 +26,10 @@ $(SRC_DIR)/startup.c \
 $(SRC_DIR)/common/led/led.c \
 $(SRC_DIR)/common/clock/system_clock.c \
 $(SRC_DIR)/common/systick/systick.c \
-$(SRC_DIR)/common/uart/uart.c
+$(SRC_DIR)/common/uart/uart.c \
+$(SRC_DIR)/aht10/aht10.c \
+$(SRC_DIR)/ssd1306/ssd1306.c \
+$(SRC_DIR)/usd_card/usd_card.c \
 
 # Includes
 C_INCLUDES = \
@@ -35,7 +38,10 @@ C_INCLUDES = \
 -I$(SRC_DIR)/common/led \
 -I$(SRC_DIR)/common/clock \
 -I$(SRC_DIR)/common/systick \
--I$(SRC_DIR)/common/uart
+-I$(SRC_DIR)/common/uart \
+-I$(SRC_DIR)/aht10 \
+-I$(SRC_DIR)/ssd1306 \
+-I$(SRC_DIR)/usd_card \
 
 # Compiler Flags
 C_DEFS = \

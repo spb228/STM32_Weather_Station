@@ -12,10 +12,6 @@ static volatile uint32_t usart2_tx_head = 0;
 static volatile uint32_t usart2_tx_tail = 0; 
 static volatile uint8_t tx_busy = 0; // 0 denotes free, 1 denotes busy
 
-// volatile char *tx_buffer;
-// volatile uint32_t tx_index;
-// volatile uint32_t tx_data_len;
-
 void usart2_gpio_init(void)
 {
     RCC_AHB1ENR |= (1 << 0);  // enable GPIOA clock
@@ -109,7 +105,6 @@ uint8_t usart2_send_str(char *str)
 
     return USART2_SUCCESS;
 }
-
 
 uint8_t print(char *str)
 {

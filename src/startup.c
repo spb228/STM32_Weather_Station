@@ -4,7 +4,10 @@
 void Reset_Handler(void);
 void Default_Handler(void);
 void SysTick_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void I2C1_EV_IRQHandler(void) __attribute__((weak,alias("Default_Handler")));
+void I2C1_ER_IRQHandler(void) __attribute__((weak, alias("Default_Handler")));
 void USART2_IRQHandler(void) __attribute__((weak, alias("Default_Handler")));
+
 extern int main(void);
 
 // Linker script symbols
@@ -66,14 +69,14 @@ uint32_t vectors[] __attribute__((section(".isr_vector"), aligned(0x80))) = {
     (uint32_t)Default_Handler,  // 28: TIM2
     (uint32_t)Default_Handler,  // 29: TIM3
     (uint32_t)Default_Handler,  // 30: TIM4
-    (uint32_t)Default_Handler,  // 31: I2C1 Event
-    (uint32_t)Default_Handler,  // 32: I2C1 Error
+    (uint32_t)I2C1_EV_IRQHandler,  // 31: I2C1 Event
+    (uint32_t)I2C1_ER_IRQHandler,  // 32: I2C1 Error
     (uint32_t)Default_Handler,  // 33: I2C2 Event
     (uint32_t)Default_Handler,  // 34: I2C2 Error
     (uint32_t)Default_Handler,  // 35: SPI1
     (uint32_t)Default_Handler,  // 36: SPI2
     (uint32_t)Default_Handler,  // 37: USART1
-    (uint32_t)USART2_IRQHandler // 38: USART2 - Our interrupt handler
+    (uint32_t)USART2_IRQHandler // 38: USART2
 };
 
 // Default handler for interrupts

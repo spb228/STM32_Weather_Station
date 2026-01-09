@@ -4,6 +4,10 @@
         "led.h": "c",
         "common_def.h": "c",
         "system_clock.h": "c",
-        "uart.h": "c"
+        "uart.h": "c",
+        "ssd1306.h": "c",
+        "string.h": "c",
+        "systick.h": "c",
+        "stdbool.h": "c"
     }
 }
