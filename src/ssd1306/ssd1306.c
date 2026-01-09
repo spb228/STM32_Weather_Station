@@ -20,8 +20,6 @@ void I2C1_Init(void) {
     // Enable I2C1 clock
     RCC_APB1ENR |= RCC_APB1ENR_I2C1EN;
     
-    // Configure PB8 (SCL) and PB9 (SDA) for alternate function 4
-    
     // Set mode to alternate function
     GPIOB_MODER &= ~(3U << (8 * 2));
     GPIOB_MODER |= (GPIO_MODER_AF << (8 * 2));

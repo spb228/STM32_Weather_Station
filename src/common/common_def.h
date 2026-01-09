@@ -12,6 +12,7 @@
 // Bus Addresses
 #define APB1_BASE       (PERIPH_BASE + 0x00U)
 #define AHB1_BASE       (PERIPH_BASE + 0x20000U) 
+#define APB2_BASE       (PERIPH_BASE + 0x10000U)
 
 // Clock Addresses
 #define RCC_BASE        (AHB1_BASE + 0x3800U)
@@ -21,6 +22,7 @@
 #define RCC_AHB1ENR     (* (volatile uint32_t *)(RCC_BASE + 0x30))
 #define RCC_APB1RSTR    (* (volatile uint32_t *)(RCC_BASE + 0x20))
 #define RCC_APB1ENR     (* (volatile uint32_t *)(RCC_BASE + 0x40))
+#define RCC_APB2ENR     (* (volatile uint32_t *)(RCC_BASE + 0x44))
 
 // Systick Addresses
 #define SYSTICK_BASE    0xE000E010U
@@ -81,4 +83,14 @@
 #define I2C1_CCR        (* (volatile uint32_t *)(I2C1_BASE + 0x1C))
 #define I2C1_TRISE      (* (volatile uint32_t *)(I2C1_BASE + 0x20))
 
-#endif // COMMON_DEF_H
+// SPI Addresses
+#define SPI1_BASE       (APB2_BASE + 0x3000)
+#define SPI1_CR1        (* (volatile uint32_t *)(SPI1_BASE + 0x00))
+#define SPI1_CR2        (* (volatile uint32_t *)(SPI1_BASE + 0x04))
+#define SPI1_SR         (* (volatile uint32_t *)(SPI1_BASE + 0x08))
+#define SPI1_DR         (* (volatile uint32_t *)(SPI1_BASE + 0x0C))
+#define SPI1_CRCPR      (* (volatile uint32_t *)(SPI1_BASE + 0x10))
+#define SPI1_RXCRCR     (* (volatile uint32_t *)(SPI1_BASE + 0x14))
+#define SPI1_TXCRCR     (* (volatile uint32_t *)(SPI1_BASE + 0x18))
+
+#endif /* COMMON_DEF_H */
