@@ -10,6 +10,5 @@ This weather station can monitor the temperature and humidity of a space while d
 
 ### Building and Running the Project
 * Clone the repo
-* Create a "build" directory inside the repo
 * Run make from inside the repo's root level using "mingw32-make clean all"
 * Upload the binary file from the build folder to the MC (VSCode)
