@@ -17,7 +17,7 @@ PA7 -> CN10-15 -> MOSI (AF5)
 
 */
 
-void SPI1_GPIO_Init(void);
+static void SPI1_GPIO_Init(void);
 void SPI1_Init(void);
 uint8_t SPI1_Receive(void);
 

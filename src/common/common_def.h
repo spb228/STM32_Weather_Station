@@ -63,6 +63,7 @@
 #define GPIOB_OTYPER    (* (volatile uint32_t *)(GPIOB_BASE + 0x04))
 #define GPIOB_OSPEEDR   (* (volatile uint32_t *)(GPIOB_BASE + 0x08))
 #define GPIOB_PUPDR     (* (volatile uint32_t *)(GPIOB_BASE + 0x0C))   
+#define GPIOB_AFRL      (* (volatile uint32_t *)(GPIOB_BASE + 0x20))
 #define GPIOB_AFRH      (* (volatile uint32_t *)(GPIOB_BASE + 0x24))
 
 /* ==================================================================== */
@@ -167,5 +168,20 @@
 
 #define GPIO_AF4             0x04 // Alternate Function 4 (I2C1/2/3)
 #define GPIO_AF9             0x09 // Alternate Function 9 (I2C2)
+
+// I2C Control Bits
+#define I2C_CR1_PE           (1U << 0)  // Peripheral Enable
+#define I2C_CR1_START        (1U << 8)  // Start Generation
+#define I2C_CR1_STOP         (1U << 9)  // Stop Generation
+#define I2C_CR1_ACK          (1U << 10) // Acknowledge Enable
+
+#define I2C_SR1_SB           (1U << 0)  // Start Bit (Master mode)
+#define I2C_SR1_ADDR         (1U << 1)  // Address sent (Master mode)
+#define I2C_SR1_BTF          (1U << 2)  // Byte Transfer Finished
+#define I2C_SR1_RXNE         (1U << 6)  // Data Register not empty (Receiver)
+#define I2C_SR1_TXE          (1U << 7)  // Data Register empty (Transmitter)
+
+#define I2C_SR2_BUSY         (1U << 1)  // Bus Busy
+
 
 #endif /* COMMON_DEF_H */

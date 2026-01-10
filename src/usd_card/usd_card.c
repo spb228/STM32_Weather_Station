@@ -5,7 +5,7 @@
 #define MISO    6
 #define MOSI    7
 
-void SPI1_GPIO_Init(void)
+static void SPI1_GPIO_Init(void)
 {
     // Enable GPIOA and SPI1 clocks
     RCC_AHB1ENR |= (1 << 0);      // GPIOA clock
@@ -32,6 +32,8 @@ void SPI1_GPIO_Init(void)
 
 void SPI1_Init(void)
 {
+    SPI1_GPIO_Init();
+
     SPI1_CR1 = 0;
     SPI1_CR1 |= (1 << 2);     // Master mode
     SPI1_CR1 |= (3 << 3);     // Baud rate = fPCLK/16
